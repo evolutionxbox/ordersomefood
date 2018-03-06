@@ -1,4 +1,5 @@
 import React from 'react';
+import OrderStore from './stores/OrderStore';
 import MenuNav from './MenuNav';
 import Menu from './Menu';
 import Basket from './Basket';
@@ -8,27 +9,25 @@ export default class OrderForm extends React.Component {
     super(props);
 
     this.state = {
-      order: []
+      order: OrderStore.getAll()
     }
-
-    this.addToOrder = this.addToOrder.bind(this);
-    // this.removeToOrder = this.removeToOrder.bind(this);
   }
 
-  addToOrder(dish, event) {
-    this.setState({
-      order: [...this.state.order, dish]
+  componentWillMount() {
+    OrderStore.on("change", () => {
+      console.log("I'm channing tatum");
+      this.setState({
+        order: OrderStore.getAll()
+      })
+
+      console.log(OrderStore.getAll());
     })
-  }
-
-  removeFromOrder() {
-
   }
 
   render () {
     return <div className="order-form">
       <MenuNav />
-      <Menu addToOrder={this.addToOrder} />
+      <Menu />
       <Basket {...this.state} />
     </div>
   }

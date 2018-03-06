@@ -1,7 +1,12 @@
 import React from 'react';
 import BasketItem from './BasketItem';
+import Title from './Title';
 
 const Basket = ({ order, fee = 2 }) => {
+  const total = order.reduce((acc, {price}) => {
+    return acc + (+price);
+  }, fee);
+
   const style = `display: ${order.length ? "block" : "none"}`
   return(
     <div className="right-column">
@@ -13,11 +18,9 @@ const Basket = ({ order, fee = 2 }) => {
         <div className="basket" id="basket" style={{display: "block"}}>
           <div className="order-container" id="order-container">
             <ul className="order" id="order">
-              {/* order.reduce(({name, price}) => {
-                return <BasketItem  />
-              }) */}
-              {order.map(({name, price}, index) => {
-                return <BasketItem key={index} name={name} price={price} />;
+              {order.map(({name, price, quantity, id}, index) => {
+                console.log(quantity);
+                return <BasketItem key={index} name={name} price={price} quantity={quantity} id={id} />;
               })}
             </ul>
           </div>
@@ -32,9 +35,7 @@ const Basket = ({ order, fee = 2 }) => {
           <div className="total" id="total">
             <p className="statement">Total</p>
             <p className="statement-price total-price">
-              £{order.reduce((acc, {price}) => {
-                return acc + (+price);
-              }, fee).toFixed(2)}
+              £{total.toFixed(2)}
             </p>
           </div>
           <button type="button" className="buy-now" id="buy-now" aria-label="Buy Now">Buy now</button>

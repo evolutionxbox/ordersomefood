@@ -7,8 +7,9 @@ const MenuNav = () => {
       <div className="sidebar" id="sidebar">
         <ul id="courses">
           {data.courses.map(({id, course}) => {
+            const link = `#${id}`;
             return <li key={id}>
-              <a href='href'>{course}</a>
+              <a href={link}>{course}</a>
             </li>;
           })}
         </ul>
