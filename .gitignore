@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+# compiled files
+public/index.js
+public/**/*.css
+public/**/*.css.map
+
