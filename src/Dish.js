@@ -13,7 +13,8 @@ const Dish = ({name, price, description, id}) => {
     <span className="dish-name">{name}</span>
     <span className="dish-price">£{(+price).toFixed(2)}</span>
     <blockquote>{description}</blockquote>
-    <button type="button" className="menu-button" id={name.replace('\s','')} aria-label={name} onClick={handleClick}><span className="sr-only">Hey, Screen Reader, you so fine.</span></button>
+    <button type="button" className="menu-button" id={name.replace('\s','')} aria-label={name} onClick={handleClick}></button>
+    {/*<span className="sr-only">Hey, Screen Reader, you so fine.</span>*/}
   </li>
 }
 

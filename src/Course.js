@@ -9,7 +9,7 @@ const Course = ({name, id}) => {
     <ul>
       {data.dishes
         .filter(dish => dish.course === id)
-        .map(({id, name, description, price}) => <Dish key={id} name={name} description={description} price={price} id={id} />)}
+        .map((props) => <Dish key={props.id} {...props} />)}
     </ul>
   </div>
 }

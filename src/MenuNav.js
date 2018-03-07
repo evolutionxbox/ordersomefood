@@ -1,10 +1,11 @@
 import React from 'react';
+import Sticker from './Sticker';
 import data from './data';
 
 const MenuNav = () => {
   return (
     <div className="left-column" id="left-column">
-      <div className="sidebar" id="sidebar">
+      <Sticker classname="sidebar" id="sidebar" stuckClassname="scrolling-sidebar">
         <ul id="courses">
           {data.courses.map(({id, course}) => {
             const link = `#${id}`;
@@ -13,7 +14,7 @@ const MenuNav = () => {
             </li>;
           })}
         </ul>
-      </div>
+      </Sticker>
     </div>
   )
 }

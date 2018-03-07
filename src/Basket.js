@@ -1,46 +1,90 @@
 import React from 'react';
 import BasketItem from './BasketItem';
 import Title from './Title';
+import Sticker from './Sticker';
+import OrderStore from './stores/OrderStore';
+
+const EmptyBasket = (shouldRender) => {
+  if (shouldRender) {
+    return <div className="empty-basket-message" id="empty-basket">
+      <p>Uh oh, it looks like you have no food in your basket!</p>
+    </div>
+  }
+}
+
+const MinimumSpend = (shouldRender) => {
+  if (shouldRender) {
+    return <div className="under-minimum-spend" id="under-minimum-spend">
+      <p className="statement">Minimum spend is</p>
+      <p className="statement-price">£15.00</p>
+    </div>
+  }
+}
+
+const OurFee = (shouldRender) => {
+  if (shouldRender) {
+    return <div className="our-fee" id="our-fee">
+      <p className="statement">Our fee</p>
+      <p className="statement-price">£2.00</p>
+    </div>
+  }
+}
+
+const OrderTotal = (shouldRender, total) => {
+  if (shouldRender) {
+    return <div className="total" id="total">
+      <p className="statement">Total</p>
+      <p className="statement-price total-price">
+        £{total.toFixed(2)}
+      </p>
+    </div>
+  }
+}
+
+
+const BuyNowButton = (shouldRender) => {
+  if (shouldRender) {
+    return <button type="button" className="buy-now" id="buy-now" aria-label="Buy Now">Buy now</button>
+  }
+}
+
+const calcSubTotal = (order) => {
+  return order.reduce((acc, {price}) => {
+    return acc + (+price);
+  }, 0)
+}
+
+const calcTotal = (subTotal, fee) => {
+  if (subTotal > 15) {
+    return subTotal + fee;
+  }
+  return subTotal;
+}
 
 const Basket = ({ order, fee = 2 }) => {
-  const total = order.reduce((acc, {price}) => {
-    return acc + (+price);
-  }, fee);
+  const subTotal = calcSubTotal(order)
+  const total = calcTotal(subTotal, fee)
+  const visible = (OrderStore.getOpen()) ? 'is-visible' : ''
 
-  const style = `display: ${order.length ? "block" : "none"}`
   return(
-    <div className="right-column">
-      <div className="my-order" id="my-order">
-        <h3>My Order</h3>
-        <div className="empty-basket-message" id="empty-basket">
-          <p>Uh oh, it looks like you have no food in your basket!</p>
-        </div>
-        <div className="basket" id="basket" style={{display: "block"}}>
+    <div className={['right-column', visible].join(' ')}>
+      <Sticker classname="my-order" id="my-order" stuckClassname="scrolling-order">
+        <Title level="3" value="My Order" />
+        {EmptyBasket(!order.length)}
+        <div className="basket" id="basket">
           <div className="order-container" id="order-container">
             <ul className="order" id="order">
-              {order.map(({name, price, quantity, id}, index) => {
-                console.log(quantity);
-                return <BasketItem key={index} name={name} price={price} quantity={quantity} id={id} />;
+              {order.map((props, index) => {
+                return <BasketItem key={index} {...props} />;
               })}
             </ul>
           </div>
-          <div className="under-minimum-spend" id="under-minimum-spend">
-            <p className="statement">Minimum spend is</p>
-            <p className="statement-price">£15.00</p>
-          </div>
-          <div className="our-fee" id="our-fee">
-            <p className="statement">Our fee</p>
-            <p className="statement-price">£2.00</p>
-          </div>
-          <div className="total" id="total">
-            <p className="statement">Total</p>
-            <p className="statement-price total-price">
-              £{total.toFixed(2)}
-            </p>
-          </div>
-          <button type="button" className="buy-now" id="buy-now" aria-label="Buy Now">Buy now</button>
+          {MinimumSpend(subTotal <= 15 && order.length)}
+          {OurFee(subTotal > 15)}
+          {OrderTotal(order.length, total)}
+          {BuyNowButton(subTotal > 15)}
         </div>
-      </div>
+      </Sticker>
     </div>
   )
 }

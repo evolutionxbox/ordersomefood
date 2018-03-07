@@ -6,6 +6,7 @@ class OrderStore extends EventEmitter {
   constructor() {
     super()
     this.order = [];
+    this._open = false;
   }
 
   findDish(sauce, id) {
@@ -18,7 +19,6 @@ class OrderStore extends EventEmitter {
     const dish = Object.assign({}, this.findDish(data.dishes, id));
 
     if (foundDishInOrder && foundDishInOrder.id) {
-      console.log(foundDishInOrder, dish, "mmm, more food");
       foundDishInOrder.quantity++;
       foundDishInOrder.price += dish.price;
     } else {
@@ -48,8 +48,21 @@ class OrderStore extends EventEmitter {
     return this.order;
   }
 
+  open() {
+    this._open = true
+    this.emit("change")
+  }
+
+  close() {
+    this._open = false
+    this.emit("change")
+  }
+
+  getOpen() {
+    return this._open
+  }
+
   handleActions(action) {
-    console.log(action, "Jackson");
     switch(action.type) {
       case "ADD_TO_ORDER": {
         this.addToOrder(action.data);
@@ -57,6 +70,14 @@ class OrderStore extends EventEmitter {
       }
       case "REMOVE_FROM_ORDER": {
         this.removeFromOrder(action.data);
+        break;
+      }
+      case "OPEN": {
+        this.open();
+        break;
+      }
+      case "CLOSE": {
+        this.close();
         break;
       }
     }

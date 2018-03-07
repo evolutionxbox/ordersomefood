@@ -15,12 +15,9 @@ export default class OrderForm extends React.Component {
 
   componentWillMount() {
     OrderStore.on("change", () => {
-      console.log("I'm channing tatum");
       this.setState({
         order: OrderStore.getAll()
       })
-
-      console.log(OrderStore.getAll());
     })
   }
 
