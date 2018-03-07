@@ -16,13 +16,15 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "browser-sync": "^2.23.6",
+    "node-sass": "^4.7.2",
     "npm-run-all": "^4.1.2",
     "webpack": "^4.0.1",
     "webpack-cli": "^2.0.9"
   },
   "scripts": {
-    "start": "run-p -rn webpack browser-sync",
+    "start": "run-p -rn webpack browser-sync sass",
     "webpack": "browser-sync start -c bs-config.js",
+    "sass": "node-sass --output-style expanded --watch --recursive --source-map true --output public/styles/ src/styles/",
     "browser-sync": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
