@@ -7,16 +7,22 @@ class OrderStore extends EventEmitter {
     super()
     this.order = [];
     this._open = false;
+
+    const dishesRef = data.ref().child('dishes');
+
+    dishesRef.on('value', snapshot => {
+      this.dishes = snapshot.val();
+    })
   }
 
-  findDish(sauce, id) {
-    return sauce.find(element => element.id === id)
+  findDish(dishes, id) {
+    return dishes.find(element => element.id === id)
   }
 
   // dish is an object
   addToOrder(id) {
     const foundDishInOrder = this.findDish(this.order, id);
-    const dish = Object.assign({}, this.findDish(data.dishes, id));
+    const dish = Object.assign({}, this.findDish(this.dishes, id));
 
     if (foundDishInOrder && foundDishInOrder.id) {
       foundDishInOrder.quantity++;
@@ -31,7 +37,7 @@ class OrderStore extends EventEmitter {
 
   removeFromOrder(id) {
     const foundDishInOrder = this.findDish(this.order, id);
-    const dish = Object.assign({}, this.findDish(data.dishes, id));
+    const dish = Object.assign({}, this.findDish(this.dishes, id));
 
     if (foundDishInOrder && foundDishInOrder.quantity > 1) {
       foundDishInOrder.quantity--;
